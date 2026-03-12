@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URBANSERVICE</title>
+    <title>URBANSERVICE | Premium Home Services</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -11,49 +11,35 @@
     <nav class="navbar"><div class="logo">URBAN<span>SERVICE</span></div></nav>
     
     <header class="hero">
-        <h1>Quality home services, simplified.</h1>
-        <a href="#services" class="btn-primary">Book Now</a>
+        <h1>Expert home services at your doorstep.</h1>
+        <a href="#services" class="btn-primary">View All Services</a>
     </header>
 
     <div class="container">
         <section id="services" class="services-grid">
+            <div class="service-card" onclick="selectService('Home Cleaning')">
+                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400" alt="Cleaning">
+                <h3>Home Cleaning</h3>
+                <p>Deep cleaning & sanitation</p>
+            </div>
+            <div class="service-card" onclick="selectService('Home Salon')">
+                <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400" alt="Salon">
+                <h3>Home Salon</h3>
+                <p>Spa, Hair & Facials</p>
+            </div>
+            <div class="service-card" onclick="selectService('Cooking Services')">
+                <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400" alt="Cooking">
+                <h3>Cooking Services</h3>
+                <p>Expert Chefs for your kitchen</p>
+            </div>
             <div class="service-card" onclick="selectService('AC Repair')">
                 <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400" alt="AC">
                 <h3>AC Repair</h3>
-            </div>
-            <div class="service-card" onclick="selectService('Cleaning')">
-                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400" alt="Cleaning">
-                <h3>Cleaning</h3>
+                <p>Servicing & Installation</p>
             </div>
         </section>
 
-        <section id="booking" class="form-container">
-            <h2>Book Service</h2>
-            <input type="text" id="selected-service" readonly placeholder="Selected Service">
-            <input type="text" id="cust-name" placeholder="Your Name">
-            <textarea id="cust-address" placeholder="Address"></textarea>
-            <button class="btn-book" onclick="submitBooking()">Confirm Booking</button>
-        </section>
-
-        <section id="map-section"><div id="map" style="height: 400px; border-radius: 20px; margin: 20px 0;"></div></section>
-
-        <section id="apply" class="form-container" style="background: #eef2ff;">
-            <h2>Join as a Pro</h2>
-            <form id="jobForm">
-                <input type="text" id="w-name" placeholder="Full Name" required>
-                <select id="w-service">
-                    <option value="AC Repair">AC Repair</option>
-                    <option value="Cleaning">Cleaning</option>
-                </select>
-                <input type="text" id="w-phone" placeholder="Phone Number" required>
-                <div style="display:flex; gap:10px;">
-                    <input type="number" step="any" id="w-lat" placeholder="Lat (e.g. 28.6)">
-                    <input type="number" step="any" id="w-lng" placeholder="Lng (e.g. 77.2)">
-                </div>
-                <button type="submit" class="btn-book">Apply Now</button>
-            </form>
-        </section>
-    </div>
+        </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
