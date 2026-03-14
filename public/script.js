@@ -2,27 +2,29 @@ let map;
 function initMap() {
     map = L.map('map').setView([28.61, 77.20], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-    loadMarkers();
+    loadWorkers();
 }
 
-async function loadMarkers() {
-    const res = await fetch('/api/workers');
-    const data = await res.json();
-    data.forEach(w => {
-        L.marker([w.lat, w.lng]).addTo(map).bindPopup(`<b>${w.name}</b><br>${w.service}`);
-    });
+async function loadWorkers() {
+    try {
+        const res = await fetch('/api/workers');
+        const data = await res.json();
+        data.forEach(w => {
+            if(w.lat && w.lng) L.marker([w.lat, w.lng]).addTo(map).bindPopup(`<b>${w.name}</b><br>${w.service}`);
+        });
+    } catch (e) { console.log("Map error:", e); }
 }
 
-function selectService(s) {
-    document.getElementById('selected-service').value = s;
+function setService(s) {
+    document.getElementById('service-input').value = s;
 }
 
-async function submitBooking() {
+async function bookService() {
     const data = {
-        name: document.getElementById('cust-name').value,
-        service: document.getElementById('selected-service').value,
-        phone: document.getElementById('cust-phone').value,
-        address: document.getElementById('cust-address').value
+        name: document.getElementById('c-name').value,
+        service: document.getElementById('service-input').value,
+        phone: document.getElementById('c-phone').value,
+        address: document.getElementById('c-addr').value
     };
     const res = await fetch('/api/bookings', {
         method: 'POST',
@@ -30,10 +32,10 @@ async function submitBooking() {
         body: JSON.stringify(data)
     });
     const result = await res.json();
-    alert(result.message);
+    alert(result.message || result.error);
 }
 
-document.getElementById('jobForm').addEventListener('submit', async (e) => {
+document.getElementById('applyForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const data = {
         workerName: document.getElementById('w-name').value,
@@ -48,7 +50,7 @@ document.getElementById('jobForm').addEventListener('submit', async (e) => {
         body: JSON.stringify(data)
     });
     const result = await res.json();
-    alert(result.message);
+    alert(result.message || result.error);
     location.reload();
 });
 
