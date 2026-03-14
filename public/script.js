@@ -1,26 +1,27 @@
 let map;
 function initMap() {
-    map = L.map('map').setView([28.61, 77.20], 12);
+    map = L.map('map').setView([28.61, 77.20], 11);
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
     loadMarkers();
 }
 
 async function loadMarkers() {
     const res = await fetch('/api/workers');
-    const workers = await res.json();
-    workers.forEach(w => {
+    const data = await res.json();
+    data.forEach(w => {
         L.marker([w.lat, w.lng]).addTo(map).bindPopup(`<b>${w.name}</b><br>${w.service}`);
     });
 }
 
-function selectService(name) {
-    document.getElementById('selected-service').value = name;
+function selectService(s) {
+    document.getElementById('selected-service').value = s;
 }
 
 async function submitBooking() {
     const data = {
         name: document.getElementById('cust-name').value,
         service: document.getElementById('selected-service').value,
+        phone: document.getElementById('cust-phone').value,
         address: document.getElementById('cust-address').value
     };
     const res = await fetch('/api/bookings', {
@@ -29,7 +30,7 @@ async function submitBooking() {
         body: JSON.stringify(data)
     });
     const result = await res.json();
-    alert(result.message || result.error);
+    alert(result.message);
 }
 
 document.getElementById('jobForm').addEventListener('submit', async (e) => {
@@ -47,8 +48,8 @@ document.getElementById('jobForm').addEventListener('submit', async (e) => {
         body: JSON.stringify(data)
     });
     const result = await res.json();
-    alert(result.message || result.error);
-    if(res.ok) location.reload();
+    alert(result.message);
+    location.reload();
 });
 
 window.onload = initMap;
