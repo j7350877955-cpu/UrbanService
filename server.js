@@ -12,7 +12,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // --- DATABASE CONNECTION ---
 // REPLACE THE STRING BELOW WITH YOUR ACTUAL MONGODB URI
-const mongoURI = "mongodb+srv://Aryanpopalghat:Aryanpopalghat23@urbanservice.w3smd8n.mongodb.net/?appName=urbanservice";
+const mongoURI = "mongodb+srv://urbanservice:urbanservice23@urbanservice.w3smd8n.mongodb.net/?appName=urbanservice";
 
 mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 5000 })
     .then(() => console.log("✅ MongoDB Connected"))
