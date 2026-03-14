@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URBANSERVICE | Premium Home Services</title>
+    <title>URBANSERVICE | On-Demand Home Care</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
@@ -11,35 +11,62 @@
     <nav class="navbar"><div class="logo">URBAN<span>SERVICE</span></div></nav>
     
     <header class="hero">
-        <h1>Expert home services at your doorstep.</h1>
-        <a href="#services" class="btn-primary">View All Services</a>
+        <h1>Expert home services, <br>delivered to your door.</h1>
     </header>
 
     <div class="container">
-        <section id="services" class="services-grid">
+        <h2 class="section-title">Select a Service</h2>
+        <div class="services-grid">
             <div class="service-card" onclick="selectService('Home Cleaning')">
-                <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400" alt="Cleaning">
+                <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400" alt="Cleaning">
                 <h3>Home Cleaning</h3>
-                <p>Deep cleaning & sanitation</p>
             </div>
             <div class="service-card" onclick="selectService('Home Salon')">
                 <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400" alt="Salon">
                 <h3>Home Salon</h3>
-                <p>Spa, Hair & Facials</p>
             </div>
             <div class="service-card" onclick="selectService('Cooking Services')">
                 <img src="https://images.unsplash.com/photo-1556910103-1c02745aae4d?w=400" alt="Cooking">
-                <h3>Cooking Services</h3>
-                <p>Expert Chefs for your kitchen</p>
+                <h3>Cooking</h3>
             </div>
             <div class="service-card" onclick="selectService('AC Repair')">
                 <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=400" alt="AC">
                 <h3>AC Repair</h3>
-                <p>Servicing & Installation</p>
             </div>
+        </div>
+
+        <section id="booking-form" class="form-box">
+            <h2>Book an Appointment</h2>
+            <input type="text" id="selected-service" readonly placeholder="Choose a service above">
+            <input type="text" id="cust-name" placeholder="Full Name">
+            <input type="text" id="cust-phone" placeholder="Phone Number">
+            <textarea id="cust-address" placeholder="Service Address"></textarea>
+            <button class="btn-main" onclick="submitBooking()">Book Now</button>
         </section>
 
-        </div>
+        <h2 class="section-title">Live Professional Map</h2>
+        <div id="map"></div>
+
+        <section id="apply-form" class="form-box apply-bg">
+            <h2>Join the Team</h2>
+            <p>Are you a pro? Apply to list your service.</p>
+            <form id="jobForm">
+                <input type="text" id="w-name" placeholder="Name" required>
+                <select id="w-service">
+                    <option value="Home Cleaning">Home Cleaning</option>
+                    <option value="Home Salon">Home Salon</option>
+                    <option value="Cooking">Cooking</option>
+                    <option value="AC Repair">AC Repair</option>
+                </select>
+                <input type="text" id="w-phone" placeholder="Contact Number" required>
+                <div style="display:flex; gap:10px;">
+                    <input type="number" step="any" id="w-lat" placeholder="Latitude">
+                    <input type="number" step="any" id="w-lng" placeholder="Longitude">
+                </div>
+                <button type="submit" class="btn-main">Submit Application</button>
+            </form>
+        </section>
+    </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="script.js"></script>
