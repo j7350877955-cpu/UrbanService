@@ -74,3 +74,12 @@ app.post('/api/worker/update-location', async (req, res) => {
         res.status(500).json({ error: e.message });
     }
 });
+
+const workerSchema = new mongoose.Schema({
+    name: String, 
+    service: String, 
+    phone: String, 
+    lat: Number, 
+    lng: Number,
+    rating: { type: String, default: "⭐ 4.5" } // You can edit this via MongoDB Atlas
+});
