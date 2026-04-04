@@ -63,7 +63,7 @@ app.get('/api/admin/data', async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
- // Add this new route to your existing server.js
+
 app.post('/api/worker/update-location', async (req, res) => {
     try {
         const { phone, lat, lng } = req.body;
@@ -73,13 +73,4 @@ app.post('/api/worker/update-location', async (req, res) => {
     } catch (e) {
         res.status(500).json({ error: e.message });
     }
-});
-
-const workerSchema = new mongoose.Schema({
-    name: String, 
-    service: String, 
-    phone: String, 
-    lat: Number, 
-    lng: Number,
-    rating: { type: String, default: "⭐ 4.5" } // You can edit this via MongoDB Atlas
 });
