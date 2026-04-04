@@ -63,3 +63,14 @@ app.get('/api/admin/data', async (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+ // Add this new route to your existing server.js
+app.post('/api/worker/update-location', async (req, res) => {
+    try {
+        const { phone, lat, lng } = req.body;
+        // Find the worker by phone and update their coordinates
+        await Worker.findOneAndUpdate({ phone: phone }, { lat, lng });
+        res.sendStatus(200);
+    } catch (e) {
+        res.status(500).json({ error: e.message });
+    }
+});
