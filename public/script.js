@@ -127,3 +127,73 @@ document.getElementById('applyForm').addEventListener('submit', async (e) => {
 });
 
 window.onload = initMap;
+
+let map;
+let markers = {};
+let customerLatLng = null;
+
+function initMap() {
+    map = L.map('map').setView([28.61, 77.20], 12);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+    // Get Customer Location to calculate ETA
+    navigator.geolocation.getCurrentPosition(pos => {
+        customerLatLng = [pos.coords.latitude, pos.coords.longitude];
+        L.marker(customerLatLng, {icon: L.divIcon({className: 'customer-icon', html: '📍'})}).addTo(map).bindPopup("You are here");
+    });
+
+    setInterval(refreshLiveMap, 5000); // Sync every 5 seconds
+}
+
+async function refreshLiveMap() {
+    const res = await fetch('/api/workers');
+    const workers = await res.json();
+
+    workers.forEach(w => {
+        const workerPos = [w.lat, w.lng];
+
+        if (markers[w.phone]) {
+            markers[w.phone].setLatLng(workerPos);
+        } else {
+            markers[w.phone] = L.marker(workerPos).addTo(map)
+                .bindPopup(`<b>${w.name}</b><br>${w.rating}`);
+        }
+
+        // Calculate ETA if customer location is known
+        if (customerLatLng) {
+            const dist = map.distance(customerLatLng, workerPos); // Distance in meters
+            updateETADisplay(w.name, dist);
+        }
+    });
+}
+
+function updateETADisplay(name, distanceMeters) {
+    const km = distanceMeters / 1000;
+    const minutes = Math.round((km / 25) * 60) + 2; // Speed 25km/h + 2 min buffer
+
+    const box = document.getElementById('eta-box');
+    box.style.display = 'block';
+    document.getElementById('tracking-worker-name').innerText = name + " is on the way";
+    document.getElementById('eta-text').innerText = `ETA: ${minutes} mins (${km.toFixed(1)} km away)`;
+}
+
+// --- WORKER SIDE: PING LOCATION ---
+function startWorkerLive(phone) {
+    if (!phone) return alert("Enter phone");
+    
+    navigator.geolocation.watchPosition(pos => {
+        fetch('/api/worker/update-location', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                phone: phone,
+                lat: pos.coords.latitude,
+                lng: pos.coords.longitude
+            })
+        });
+    }, err => console.error(err), { enableHighAccuracy: true });
+    
+    alert("Live Tracking Started! Keep this tab open.");
+}
+
+window.onload = initMap;
