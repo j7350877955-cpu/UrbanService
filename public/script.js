@@ -174,3 +174,29 @@ async function refreshMarkers() {
         });
     } catch (e) { console.error("Map Load Error:", e); }
 }
+async function sendBooking() {
+    const data = {
+        name: document.getElementById('c-name').value,
+        service: document.getElementById('service-choice').value,
+        phone: document.getElementById('c-phone').value,
+        address: document.getElementById('c-addr').value
+    };
+
+    try {
+        const res = await fetch('/api/bookings', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        
+        if (res.ok) {
+            alert("🎉 " + result.message);
+        } else {
+            // This will now show "bad auth" or "IP not whitelisted"
+            alert("⚠️ " + (result.error || "Booking Failed"));
+        }
+    } catch (err) {
+        alert("❌ Server is offline or Database connection timed out.");
+    }
+}
