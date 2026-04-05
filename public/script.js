@@ -128,68 +128,53 @@ document.getElementById('applyForm').addEventListener('submit', async (e) => {
 
 window.onload = initMap;
 
-let map;
-let markers = {};
-let customerLatLng = null;
+// Function for Booking
+async function sendBooking() {
+    const data = {
+        name: document.getElementById('c-name').value,
+        service: document.getElementById('service-choice').value,
+        phone: document.getElementById('c-phone').value,
+        address: document.getElementById('c-addr').value
+    };
 
-function initMap() {
-    map = L.map('map').setView([28.61, 77.20], 12);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
-
-    // Get Customer Location to calculate ETA
-    navigator.geolocation.getCurrentPosition(pos => {
-        customerLatLng = [pos.coords.latitude, pos.coords.longitude];
-        L.marker(customerLatLng, {icon: L.divIcon({className: 'customer-icon', html: '📍'})}).addTo(map).bindPopup("You are here");
-    });
-
-    setInterval(refreshLiveMap, 5000); // Sync every 5 seconds
-}
-
-async function refreshLiveMap() {
-    const res = await fetch('/api/workers');
-    const workers = await res.json();
-
-    workers.forEach(w => {
-        const workerPos = [w.lat, w.lng];
-
-        if (markers[w.phone]) {
-            markers[w.phone].setLatLng(workerPos);
-        } else {
-            markers[w.phone] = L.marker(workerPos).addTo(map)
-                .bindPopup(`<b>${w.name}</b><br>${w.rating}`);
-        }
-
-        // Calculate ETA if customer location is known
-        if (customerLatLng) {
-            const dist = map.distance(customerLatLng, workerPos); // Distance in meters
-            updateETADisplay(w.name, dist);
-        }
-    });
-}
-
-function updateETADisplay(name, distanceMeters) {
-    const km = distanceMeters / 1000;
-    const minutes = Math.round((km / 25) * 60) + 2; // Speed 25km/h + 2 min buffer
-
-    const box = document.getElementById('eta-box');
-    box.style.display = 'block';
-    document.getElementById('tracking-worker-name').innerText = name + " is on the way";
-    document.getElementById('eta-text').innerText = `ETA: ${minutes} mins (${km.toFixed(1)} km away)`;
-}
-
-// --- WORKER SIDE: PING LOCATION ---
-function startWorkerLive(phone) {
-    if (!phone) return alert("Enter phone");
-    
-    navigator.geolocation.watchPosition(pos => {
-        fetch('/api/worker/update-location', {
+    try {
+        const res = await fetch('/api/bookings', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                phone: phone,
-                lat: pos.coords.latitude,
-                lng: pos.coords.longitude
-            })
+            body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        // This will now show the REAL error if it fails
+        alert(result.message || result.error || "Connection Lost");
+    } catch (err) {
+        alert("Server is down. Please check Render Logs.");
+    }
+}
+
+// Function for Job Application
+document.getElementById('applyForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const data = {
+        name: document.getElementById('w-name').value,
+        service: document.getElementById('w-service').value,
+        phone: document.getElementById('w-phone').value,
+        lat: parseFloat(document.getElementById('w-lat').value) || 28.61,
+        lng: parseFloat(document.getElementById('w-lng').value) || 77.20
+    };
+
+    try {
+        const res = await fetch('/api/apply', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
+        });
+        const result = await res.json();
+        alert(result.message || result.error || "Submission Failed");
+        if(res.ok) location.reload();
+    } catch (err) {
+        alert("Check your Internet or Render status.");
+    }
+});
         });
     }, err => console.error(err), { enableHighAccuracy: true });
     
