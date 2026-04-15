@@ -181,5 +181,46 @@
     };
 </script>
 
+    <section id="admin-panel" style="padding: 50px 8%; background: #fff; margin-top: 50px; border-top: 2px solid var(--primary);">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h2 style="color: var(--primary);">Admin Dashboard</h2>
+        <button onclick="refreshAdminData()" style="width: auto; padding: 10px 20px; background: var(--accent);">Refresh Data</button>
+    </div>
+
+    <div class="main-layout" style="grid-template-columns: 1fr;">
+        <div class="form-box">
+            <h3>Recent Bookings</h3>
+            <table id="bookingTable" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background: var(--soft-bg); text-align: left;">
+                        <th style="padding: 12px;">Customer</th>
+                        <th style="padding: 12px;">Service</th>
+                        <th style="padding: 12px;">Phone</th>
+                        <th style="padding: 12px;">Address</th>
+                    </tr>
+                </thead>
+                <tbody id="bookingBody">
+                    </tbody>
+            </table>
+        </div>
+
+        <div class="form-box" style="margin-top: 40px;">
+            <h3>Partner Applications</h3>
+            <table id="appTable" style="width: 100%; border-collapse: collapse; margin-top: 20px;">
+                <thead>
+                    <tr style="background: var(--soft-bg); text-align: left;">
+                        <th style="padding: 12px;">Applicant</th>
+                        <th style="padding: 12px;">Expertise</th>
+                        <th style="padding: 12px;">Exp (Years)</th>
+                        <th style="padding: 12px;">Contact</th>
+                    </tr>
+                </thead>
+                <tbody id="appBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
 </body>
 </html>
