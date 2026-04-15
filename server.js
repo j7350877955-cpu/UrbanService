@@ -46,3 +46,25 @@ app.get('/api/worker-location', (req, res) => {
 });
 
 app.listen(5000, () => console.log("Server running on port 5000"));
+
+// --- Admin Routes ---
+
+// Fetch all bookings for the Admin Panel
+app.get('/api/admin/bookings', async (req, res) => {
+    try {
+        const bookings = await Booking.find().sort({ _id: -1 }); // Newest first
+        res.json(bookings);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch bookings" });
+    }
+});
+
+// Fetch all job applications for the Admin Panel
+app.get('/api/admin/applications', async (req, res) => {
+    try {
+        const apps = await Application.find().sort({ _id: -1 });
+        res.json(apps);
+    } catch (error) {
+        res.status(500).json({ error: "Failed to fetch applications" });
+    }
+});
