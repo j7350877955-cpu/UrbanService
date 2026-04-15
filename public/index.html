@@ -3,356 +3,183 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>URBANSERVICE | Home Services</title>
+    <title>EliteHome | Professional Services</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
-        /* Soft, Modern Color Palette & Base Styles */
         :root {
-            --primary-color: #64b5f6; /* Soft Blue */
-            --primary-light: #e3f2fd;
-            --text-main: #37474f;
-            --text-light: #78909c;
-            --bg-color: #f9fbfd;
-            --white: #ffffff;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --primary: #7c4dff;
+            --soft-bg: #f8f9fe;
+            --card-bg: #ffffff;
+            --text: #2d3436;
+            --accent: #00cec9;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            line-height: 1.6;
-        }
-
+        body { font-family: 'Inter', sans-serif; background: var(--soft-bg); color: var(--text); margin: 0; scroll-behavior: smooth; }
+        
         /* Navigation */
-        header {
-            background-color: var(--white);
-            padding: 1rem 5%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-color);
-            letter-spacing: 1px;
-        }
-
-        nav a {
-            text-decoration: none;
-            color: var(--text-main);
-            margin-left: 1.5rem;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        nav a:hover {
-            color: var(--primary-color);
-        }
+        nav { display: flex; justify-content: space-between; padding: 20px 8%; background: white; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 1000; }
+        .logo { font-size: 24px; font-weight: 800; color: var(--primary); }
+        .nav-links a { margin-left: 25px; text-decoration: none; color: var(--text); font-weight: 500; }
 
         /* Hero Section */
-        .hero {
-            text-align: center;
-            padding: 5rem 5%;
-            background-color: var(--primary-light);
-        }
+        .hero { padding: 80px 8%; text-align: center; background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); }
+        .hero h1 { font-size: 3rem; margin-bottom: 20px; }
 
-        .hero h1 {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: var(--text-main);
-        }
+        /* Service Grid */
+        .services-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 50px 8%; }
+        .service-card { background: white; padding: 30px; border-radius: 20px; text-align: center; transition: 0.3s; cursor: pointer; border: 1px solid #eee; }
+        .service-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(124, 77, 255, 0.1); }
+        .service-card img { width: 60px; margin-bottom: 15px; }
 
-        .hero p {
-            color: var(--text-light);
-            font-size: 1.1rem;
-            max-width: 600px;
-            margin: 0 auto 2rem;
-        }
+        /* Forms & Map Section */
+        .main-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; padding: 50px 8%; }
+        .form-box { background: white; padding: 40px; border-radius: 25px; box-shadow: 0 10px 40px rgba(0,0,0,0.03); }
+        input, select, textarea { width: 100%; padding: 12px; margin: 10px 0; border: 1.5px solid #eee; border-radius: 10px; outline: none; transition: 0.3s; }
+        input:focus { border-color: var(--primary); }
+        button { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 10px; }
 
-        /* Services Grid */
-        .section-title {
-            text-align: center;
-            margin: 4rem 0 2rem;
-            font-size: 2rem;
-        }
-
-        .services {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            padding: 0 5%;
-            margin-bottom: 4rem;
-        }
-
-        .service-card {
-            background: var(--white);
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .service-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .service-card img {
-            width: 100%;
-            height: 180px;
-            object-fit: cover;
-        }
-
-        .service-info {
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        /* Forms & Tracking Layout */
-        .interactive-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            padding: 0 5% 4rem;
-        }
-
-        .panel {
-            flex: 1;
-            min-width: 300px;
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: var(--shadow);
-        }
-
-        .panel h3 {
-            margin-bottom: 1.5rem;
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--primary-light);
-            padding-bottom: 0.5rem;
-        }
-
-        input, select, button, textarea {
-            width: 100%;
-            padding: 0.8rem;
-            margin-bottom: 1rem;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 1rem;
-        }
-
-        button {
-            background-color: var(--primary-color);
-            color: var(--white);
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            transition: background 0.3s;
-        }
-
-        button:hover {
-            background-color: #42a5f5;
-        }
-
-        /* Map Container */
-        #map {
-            height: 350px;
-            width: 100%;
-            border-radius: 8px;
-            z-index: 1;
-        }
+        #map { height: 400px; border-radius: 25px; border: 5px solid white; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
         
-        .tracker-info {
-            margin-top: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            text-align: center;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--text-main);
-            color: var(--white);
-            text-align: center;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
+        @media (max-width: 768px) { .main-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo">URBANSERVICE</div>
-        <nav>
-            <a href="#services">Services</a>
-            <a href="#booking">Book Now</a>
-            <a href="#join">Join the Team</a>
-        </nav>
-    </header>
+<nav>
+    <div class="logo">EliteHome</div>
+    <div class="nav-links">
+        <a href="#services">Services</a>
+        <a href="#book">Book Now</a>
+        <a href="#apply">Work with Us</a>
+    </div>
+</nav>
 
-    <section class="hero">
-        <h1>Professional Home Services, On Demand</h1>
-        <p>Expert cleaning, repairs, and salon services delivered right to your doorstep. Track your professional in real-time.</p>
-    </section>
+<section class="hero">
+    <h1>Your Home, Expertly Cared For</h1>
+    <p>Premium home services at the tap of a button.</p>
+</section>
 
-    <h2 class="section-title" id="services">Our Services</h2>
-    <section class="services">
-        <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=500&auto=format&fit=crop" alt="Home Cleaning">
-            <div class="service-info">
-                <h3>Home Cleaning</h3>
-                <p>Deep cleaning for a sparkling home.</p>
-            </div>
-        </div>
-        <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=500&auto=format&fit=crop" alt="AC Repair">
-            <div class="service-info">
-                <h3>AC Repair</h3>
-                <p>Expert servicing and cooling repair.</p>
-            </div>
-        </div>
-        <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1560066984-138dadb4c035?w=500&auto=format&fit=crop" alt="Home Salon">
-            <div class="service-info">
-                <h3>Home Salon</h3>
-                <p>Relaxing beauty treatments at home.</p>
-            </div>
-        </div>
-        <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1607472586893-edb57cbceb42?w=500&auto=format&fit=crop" alt="Plumber">
-            <div class="service-info">
-                <h3>Plumber</h3>
-                <p>Fix leaks and pipe issues instantly.</p>
-            </div>
-        </div>
-        <div class="service-card">
-            <img src="https://images.unsplash.com/photo-1621905251189-08b45d6a269e?w=500&auto=format&fit=crop" alt="Electrician">
-            <div class="service-info">
-                <h3>Electrician</h3>
-                <p>Safe and reliable electrical work.</p>
-            </div>
-        </div>
-    </section>
+<div class="services-container" id="services">
+    <div class="service-card" onclick="setService('Home Cleaning')">
+        <img src="https://cdn-icons-png.flaticon.com/512/995/995053.png" alt="Cleaning">
+        <h3>Home Cleaning</h3>
+    </div>
+    <div class="service-card" onclick="setService('AC Repair')">
+        <img src="https://cdn-icons-png.flaticon.com/512/911/911310.png" alt="AC">
+        <h3>AC Repair</h3>
+    </div>
+    <div class="service-card" onclick="setService('Home Salon')">
+        <img src="https://cdn-icons-png.flaticon.com/512/1940/1940922.png" alt="Salon">
+        <h3>Home Salon</h3>
+    </div>
+    <div class="service-card" onclick="setService('Plumber')">
+        <img src="https://cdn-icons-png.flaticon.com/512/3015/3015111.png" alt="Plumber">
+        <h3>Plumbing</h3>
+    </div>
+    <div class="service-card" onclick="setService('Electrician')">
+        <img src="https://cdn-icons-png.flaticon.com/512/2324/2324108.png" alt="Electrician">
+        <h3>Electrician</h3>
+    </div>
+</div>
 
-    <h2 class="section-title" id="booking">Booking & Live Tracking</h2>
-    <section class="interactive-section">
-        <div class="panel">
-            <h3>Book a Service</h3>
-            <form id="bookingForm">
-                <input type="text" placeholder="Full Name" required>
-                <input type="tel" placeholder="Phone Number" required>
-                <select required>
-                    <option value="" disabled selected>Select a Service</option>
-                    <option value="cleaning">Home Cleaning</option>
-                    <option value="ac">AC Repair</option>
-                    <option value="salon">Home Salon</option>
-                    <option value="plumber">Plumber</option>
-                    <option value="electrician">Electrician</option>
-                </select>
-                <textarea placeholder="Your Address" rows="3" required></textarea>
-                <button type="submit">Confirm Booking</button>
-            </form>
-        </div>
+<div class="main-layout" id="book">
+    <div class="form-box">
+        <h2>Book a Service</h2>
+        <form id="bookingForm">
+            <input type="text" id="custName" placeholder="Your Name" required>
+            <input type="tel" id="custPhone" placeholder="Phone Number" required>
+            <input type="text" id="selectedService" placeholder="Selected Service" readonly>
+            <textarea id="custAddress" placeholder="Full Address" required></textarea>
+            <button type="submit">Confirm & Track</button>
+        </form>
+    </div>
+    <div id="map"></div>
+</div>
 
-        <div class="panel">
-            <h3>Worker Live Tracking</h3>
-            <div id="map"></div>
-            <div class="tracker-info" id="trackingStatus">Awaiting booking confirmation to show worker location...</div>
-        </div>
-    </section>
+<section class="main-layout" id="apply">
+    <div class="form-box">
+        <h2>Job Application</h2>
+        <form id="jobForm">
+            <input type="text" id="appName" placeholder="Full Name" required>
+            <input type="tel" id="appPhone" placeholder="Phone Number" required>
+            <select id="appExpertise">
+                <option value="cleaning">Cleaning</option>
+                <option value="ac">AC Repair</option>
+                <option value="salon">Salon</option>
+                <option value="plumber">Plumber</option>
+                <option value="electrician">Electrician</option>
+            </select>
+            <input type="number" id="appExp" placeholder="Years of Experience" required>
+            <button type="submit" style="background: var(--accent);">Submit Application</button>
+        </form>
+    </div>
+    <div>
+        <h2>Why Join EliteHome?</h2>
+        <p>Join over 5,000+ professionals earning more with flexible hours and instant payouts.</p>
+    </div>
+</section>
 
-    <h2 class="section-title" id="join">Join as a Professional</h2>
-    <section class="interactive-section">
-        <div class="panel" style="max-width: 600px; margin: 0 auto;">
-            <h3>Partner With Us</h3>
-            <form id="jobForm">
-                <input type="text" placeholder="Full Name" required>
-                <input type="tel" placeholder="Phone Number" required>
-                <select required>
-                    <option value="" disabled selected>Your Expertise</option>
-                    <option value="cleaning">Cleaning Professional</option>
-                    <option value="ac">AC Technician</option>
-                    <option value="salon">Beautician</option>
-                    <option value="plumber">Plumber</option>
-                    <option value="electrician">Electrician</option>
-                </select>
-                <input type="number" placeholder="Years of Experience" required>
-                <button type="submit">Submit Application</button>
-            </form>
-        </div>
-    </section>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+    // --- Frontend Logic ---
+    const map = L.map('map').setView([28.6139, 77.2090], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+    let marker = L.marker([28.6139, 77.2090]).addTo(map).bindPopup("Worker Location");
 
-    <footer>
-        <p>&copy; 2026 URBANSERVICE. All Rights Reserved.</p>
-    </footer>
+    function setService(name) {
+        document.getElementById('selectedService').value = name;
+        window.location.href = '#book';
+    }
 
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        // --- 1. Map Initialization (Leaflet.js) ---
-        // Default center coordinates (e.g., center of a city)
-        const map = L.map('map').setView([28.6139, 77.2090], 13); 
+    // Connect to Backend: Booking
+    document.getElementById('bookingForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('custName').value,
+            phone: document.getElementById('custPhone').value,
+            service: document.getElementById('selectedService').value,
+            address: document.getElementById('custAddress').value
+        };
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '© OpenStreetMap'
-        }).addTo(map);
-
-        let workerMarker;
-        let trackingInterval;
-
-        // --- 2. Booking Submission & Tracking Simulation ---
-        document.getElementById('bookingForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Booking Confirmed! Your professional has been dispatched.');
-            
-            const statusText = document.getElementById('trackingStatus');
-            statusText.innerHTML = "<strong>Status:</strong> Worker is on the way. Tracking live...";
-            statusText.style.color = "#4caf50";
-
-            // If a marker already exists, remove it
-            if (workerMarker) {
-                map.removeLayer(workerMarker);
-                clearInterval(trackingInterval);
-            }
-
-            // Start worker at a nearby coordinate
-            let currentLat = 28.6139 + (Math.random() - 0.5) * 0.05;
-            let currentLng = 77.2090 + (Math.random() - 0.5) * 0.05;
-            
-            workerMarker = L.marker([currentLat, currentLng]).addTo(map)
-                .bindPopup('Your Professional')
-                .openPopup();
-            
-            map.setView([currentLat, currentLng], 14);
-
-            // Simulate live movement
-            trackingInterval = setInterval(() => {
-                // Move the marker slightly to simulate driving
-                currentLat += (Math.random() - 0.5) * 0.001;
-                currentLng += (Math.random() - 0.5) * 0.001;
-                workerMarker.setLatLng([currentLat, currentLng]);
-                map.panTo([currentLat, currentLng]);
-            }, 3000); // Updates every 3 seconds
+        const res = await fetch('http://localhost:5000/api/book', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
         });
+        
+        if(res.ok) {
+            alert("Booking successful! Tracking worker...");
+            startTracking();
+        }
+    };
 
-        // --- 3. Job Application Submission ---
-        document.getElementById('jobForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            alert('Application Submitted! Our recruitment team will contact you soon.');
-            this.reset();
+    // Live Tracking Simulation
+    function startTracking() {
+        setInterval(async () => {
+            const res = await fetch('http://localhost:5000/api/worker-location');
+            const pos = await res.json();
+            marker.setLatLng([pos.lat, pos.lng]);
+            map.panTo([pos.lat, pos.lng]);
+        }, 3000);
+    }
+
+    // Connect to Backend: Application
+    document.getElementById('jobForm').onsubmit = async (e) => {
+        e.preventDefault();
+        const data = {
+            name: document.getElementById('appName').value,
+            phone: document.getElementById('appPhone').value,
+            expertise: document.getElementById('appExpertise').value,
+            experience: document.getElementById('appExp').value
+        };
+        await fetch('http://localhost:5000/api/apply', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(data)
         });
-    </script>
+        alert("Application received!");
+    };
+</script>
+
 </body>
 </html>
