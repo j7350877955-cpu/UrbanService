@@ -179,6 +179,42 @@
         });
         alert("Application received!");
     };
+    // --- Admin Panel Logic ---
+
+async function refreshAdminData() {
+    try {
+        // Fetch Bookings
+        const bookRes = await fetch('http://localhost:5000/api/admin/bookings');
+        const bookings = await bookRes.json();
+        const bookingBody = document.getElementById('bookingBody');
+        bookingBody.innerHTML = bookings.map(b => `
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 12px;">${b.name}</td>
+                <td style="padding: 12px;"><span style="background:#e3f2fd; padding:4px 8px; border-radius:5px; font-size:12px;">${b.service}</span></td>
+                <td style="padding: 12px;">${b.phone}</td>
+                <td style="padding: 12px;">${b.address}</td>
+            </tr>
+        `).join('');
+
+        // Fetch Applications
+        const appRes = await fetch('http://localhost:5000/api/admin/applications');
+        const apps = await appRes.json();
+        const appBody = document.getElementById('appBody');
+        appBody.innerHTML = apps.map(a => `
+            <tr style="border-bottom: 1px solid #eee;">
+                <td style="padding: 12px;">${a.name}</td>
+                <td style="padding: 12px;">${a.expertise}</td>
+                <td style="padding: 12px;">${a.experience} Years</td>
+                <td style="padding: 12px;">${a.phone}</td>
+            </tr>
+        `).join('');
+    } catch (err) {
+        console.error("Error loading admin data:", err);
+    }
+}
+
+// Load data automatically when page opens
+window.onload = refreshAdminData;
 </script>
 
     <section id="admin-panel" style="padding: 50px 8%; background: #fff; margin-top: 50px; border-top: 2px solid var(--primary);">
